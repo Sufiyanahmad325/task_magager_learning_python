@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Task Manager</title>
+</head>
+<body>
+
+    <h1>Welcome, {{ request.user.username }}!</h1>
+
+    <h2>Your Tasks</h2>
+
+    {% for task in tasks %}
+        <div>
+            <h3>{{ task.title }}</h3>
+            <p>{{ task.description }}</p>
+            <p>Priority: {{ task.priority }}</p>
+            <p>Completed: {{ task.is_completed }}</p>
+        </div>
+    {% empty %}
+        <p>You haven't created any tasks yet.</p>
+    {% endfor %}
+
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+</body>
+</html>
