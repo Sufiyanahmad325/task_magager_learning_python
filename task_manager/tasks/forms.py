@@ -15,5 +15,8 @@ class SignUpForm(UserCreationForm):
 
 class TaskForm(forms.ModelForm):
     class Meta:
-        model:Task
-        fields=['title' , 'description' , 'deu_date' , 'priority']
+        model=Task
+        fields = ['title', 'description', 'due_date', 'priority']
+
+
+
