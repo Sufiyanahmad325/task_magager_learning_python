@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import SignUpForm
 from .models import Task
+from .forms import TaskForm
 
 
 
@@ -64,3 +65,24 @@ def logout_view(request):
 def dashboard_view(request):
     tasks = Task.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'tasks/dashboard.html', {'tasks': tasks})
+
+
+
+
+
+@login_required
+def create_task_view(request):
+    if request.method == "POST":
+        form = TaskForm(request.POST)
+
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
+
+            return redirect('dashboard')
+        
+    else:
+        form = TaskForm()
+    
+    return render(request , 'tasks/create_task.html' , {'form':form})
