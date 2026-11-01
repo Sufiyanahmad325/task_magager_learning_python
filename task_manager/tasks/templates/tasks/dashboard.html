@@ -17,7 +17,9 @@
             <p>{{ task.description }}</p>
             <p>Priority: {{ task.priority }}</p>
             <p>Completed: {{ task.is_completed }}</p>
+            <a href="{% url 'edit-task' task.id %}">Edit</a>
         </div>
+        <hr>
     {% empty %}
         <p>You haven't created any tasks yet.</p>
     {% endfor %}
@@ -26,6 +28,5 @@
         {% csrf_token %}
         <button type="submit">Logout</button>
     </form>
-
 </body>
 </html>
