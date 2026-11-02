@@ -105,3 +105,27 @@ def edit_task_view(request, task_id):
         form = TaskForm(instance=task)
     
     return render(request , 'tasks/edit_task.html' , {'form':form})
+
+
+
+@login_required
+def delete_task_view(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+
+    if request.method == 'POST':
+        task.delete()
+        return redirect('dashboard')
+
+    return redirect('dashboard')
+
+
+
+
+@login_required
+def toggle_task_view(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+
+    task.is_completed = not task.is_completed
+    task.save()
+
+    return redirect('dashboard')
