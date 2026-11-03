@@ -10,6 +10,21 @@
 
     <h2>Your Tasks</h2>
 
+    <form method="GET" action="{% url 'dashboard' %}">
+      <input
+        type="text"
+        name="q"
+        placeholder="Search tasks..."
+        value="{{ query }}"
+      />
+
+      <button type="submit">Search</button>
+
+      {% if query %}
+      <a href="{% url 'dashboard' %}">Clear</a>
+      {% endif %}
+    </form>
+
     {% for task in tasks %}
     <div>
       <h3>{{ task.title }}</h3>
