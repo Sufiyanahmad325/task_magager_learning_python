@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 
 from django.shortcuts import render, redirect ,get_object_or_404
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
@@ -65,15 +65,22 @@ def logout_view(request):
 @login_required
 def dashboard_view(request):
     query = request.GET.get('q' , "") # ye line batao mujhe 
+    status = request.GET.get('status', "")
     tasks = Task.objects.filter(user=request.user).order_by('-created_at')
 
     if query:
           tasks = tasks.filter(title__icontains=query)
 
+    if status == 'completed':
+        tasks = tasks.filter(is_completed=True)
+    elif status == 'pending':
+        tasks = tasks.filter(is_completed=False)
+
     return render(request, 'tasks/dashboard.html', 
                   {
                       'tasks': tasks ,
-                        'query': query
+                        'query': query,
+                        'status': status
                   }
                 )
 
