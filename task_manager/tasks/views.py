@@ -64,8 +64,18 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
+    query = request.GET.get('q' , "") # ye line batao mujhe 
     tasks = Task.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'tasks/dashboard.html', {'tasks': tasks})
+
+    if query:
+          tasks = tasks.filter(title__icontains=query)
+
+    return render(request, 'tasks/dashboard.html', 
+                  {
+                      'tasks': tasks ,
+                        'query': query
+                  }
+                )
 
 
 
@@ -129,3 +139,8 @@ def toggle_task_view(request, task_id):
     task.save()
 
     return redirect('dashboard')
+
+
+
+
+
