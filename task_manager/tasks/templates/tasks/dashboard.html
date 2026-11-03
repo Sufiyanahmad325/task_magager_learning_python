@@ -25,12 +25,25 @@
       {% endif %}
     </form>
 
+    <form method="GET" action="{% url 'dashboard' %}">
+      <select name="status" onchange="this.form.submit()">
+        <option value="">All Tasks</option>
+        <option value="completed" {% if status == 'completed' %}selected{% endif %}>
+          Completed
+        </option>
+        <option value="pending" {% if status == 'pending' %}selected{% endif %}>
+          Pending
+        </option>
+      </select>
+    </form>
+
     {% for task in tasks %}
     <div>
       <h3>{{ task.title }}</h3>
       <p>{{ task.description }}</p>
       <p>Priority: {{ task.priority }}</p>
       <p>Completed: {{ task.is_completed }}</p>
+
       <form method="POST" action="{% url 'toggle-task' task.id %}">
         {% csrf_token %} {% if task.is_completed %}
         <button type="submit">Mark Incomplete</button>
@@ -38,6 +51,7 @@
         <button type="submit">Mark Complete</button>
         {% endif %}
       </form>
+      
       <a href="{% url 'edit-task' task.id %}">Edit</a>
 
       <form method="POST" action="{% url 'delete-task' task.id %}">
