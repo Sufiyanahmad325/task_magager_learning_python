@@ -66,6 +66,7 @@ def logout_view(request):
 def dashboard_view(request):
     query = request.GET.get('q' , "") # ye line batao mujhe 
     status = request.GET.get('status', "")
+    sort_by = request.GET.get('sort', 'newest')
     tasks = Task.objects.filter(user=request.user).order_by('-created_at')
 
     if query:
@@ -76,11 +77,22 @@ def dashboard_view(request):
     elif status == 'pending':
         tasks = tasks.filter(is_completed=False)
 
+
+    if sort_by == 'newest':
+        tasks = tasks.order_by('-created_at')
+
+    elif sort_by == 'oldest':
+        tasks = tasks.order_by('created_at')
+
+    elif sort_by == 'high':
+        tasks = tasks.order_by('priority')
+
     return render(request, 'tasks/dashboard.html', 
                   {
                       'tasks': tasks ,
                         'query': query,
-                        'status': status
+                        'status': status,
+                        'sort_by': sort_by
                   }
                 )
 
