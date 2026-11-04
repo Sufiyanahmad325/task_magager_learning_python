@@ -10,7 +10,7 @@
 
     <h2>Your Tasks</h2>
 
-    <form method="GET" action="{% url 'dashboard' %}">
+    {% comment %} <form method="GET" action="{% url 'dashboard' %}">
       <input
         type="text"
         name="q"
@@ -35,7 +35,63 @@
           Pending
         </option>
       </select>
+    </form> {% endcomment %}
+
+    {% comment %} input and select form  {% endcomment %}
+    <form method="GET" action="{% url 'dashboard' %}">
+
+      <input
+        type="text"
+        name="q"
+        placeholder="Search tasks..."
+        value="{{ query }}"
+      />
+
+      <button type="submit">Search</button>
+
+      <select name="status" onchange="this.form.submit()">
+
+        <option value="">All Tasks</option>
+
+        <option value="completed"
+            {% if status == 'completed' %}selected{% endif %}>
+            Completed
+        </option>
+
+        <option value="pending"
+            {% if status == 'pending' %}selected{% endif %}>
+            Pending
+        </option>
+
+      </select>
+
+
+      <select name="sort" onchange="this.form.submit()">
+
+    <option value="newest"
+        {% if sort_by == 'newest' %}selected{% endif %}>
+        Newest First
+    </option>
+
+    <option value="oldest"
+        {% if sort_by == 'oldest' %}selected{% endif %}>
+        Oldest First
+    </option>
+
+    <option value="high"
+        {% if sort_by == 'high' %}selected{% endif %}>
+        High Priority
+    </option>
+
+</select>
+
+      {% if query or status or sort_by %}
+        <a href="{% url 'dashboard' %}">Clear</a>
+      {% endif %}
+
     </form>
+
+    {% comment %} cards {% endcomment %}
 
     {% for task in tasks %}
     <div>
